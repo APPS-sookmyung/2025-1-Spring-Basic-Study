@@ -18,6 +18,7 @@ public class MemberController {
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
+        system.out.println("memberService = " +memberService.getClass());
     }
 
     @GetMapping(value = "/members/new")
