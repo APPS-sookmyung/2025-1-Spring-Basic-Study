@@ -10,27 +10,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
-// Spring container가 뜰 때 생성됨
 @Controller
 public class MemberController {
 
     private final MemberService memberService;
 
-    // MemberService는 순수한 자바 클래스
-    // 1. 생성자 주입 - 가장 권장됨
     @Autowired
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
-
-    /*
-    @Autowired // 2. 필드 주입 - 별로 안 좋음
-    private final MemberService memberService;
-
-    @Autowired // 3. setter 주입
-    public void setMemberService(MemberService memberService) {
-        this.memberService = memberService;
-    } */
 
     @GetMapping("/members/new")
     public String createForm() {
@@ -38,23 +26,21 @@ public class MemberController {
     }
 
     @PostMapping("/members/new")
-    public String create(MemberForm form) { // form의 name에 input에 입력된 값이 들어옴 (POST Method)
-        Member member = new Member();
-        member.setName(form.getName()); // 폼에 입력된 이름을 가져옴
+    public String create(MemberForm form) { //Spring에서 자동으로 form.SetName 해줌
+        Member member=new Member();
+        member.setName(form.getName());
 
         memberService.join(member);
 
         return "redirect:/";
     }
 
-    @GetMapping("/members")
+    @GetMapping("members")
     public String list(Model model) {
         List<Member> members = memberService.findMembers();
         model.addAttribute("members", members);
         return "members/memberList";
     }
-
-
 }
 
 

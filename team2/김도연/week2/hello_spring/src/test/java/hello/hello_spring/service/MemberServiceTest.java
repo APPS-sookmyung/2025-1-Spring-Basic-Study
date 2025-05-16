@@ -1,19 +1,20 @@
 package hello.hello_spring.service;
 
 import hello.hello_spring.domain.Member;
+import hello.hello_spring.repository.MemberRepository;
 import hello.hello_spring.repository.MemoryMemberRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MemberServiceTest {
-    // 문제: MemberService의 memberRepository 객체 != MemberServiceTest의 memberRepository 객체
+
     MemberService memberService;
     MemoryMemberRepository memberRepository;
 
@@ -22,6 +23,7 @@ class MemberServiceTest {
         memberRepository = new MemoryMemberRepository();
         memberService = new MemberService(memberRepository);
     }
+
     @AfterEach
     public void afterEach() {
         memberRepository.clearStore();
@@ -29,49 +31,44 @@ class MemberServiceTest {
 
     @Test
     void 회원가입() {
-        // given
+        //given
         Member member = new Member();
-        member.setName("hello");
+        member.setName("spring");
 
-        // when
-        // 회원가입하면 아이디가 반환됨, 반환된 아이디를 saveId에 저장
+        //when
         Long saveId = memberService.join(member);
 
-        // then
+        //then
         Member findMember = memberService.findOne(saveId).get();
         assertThat(member.getName()).isEqualTo(findMember.getName());
     }
 
     @Test
-    public void 중복_회원_예외() {
-        // given
+    void 중복회원예외() {
+        //given
         Member member1 = new Member();
         member1.setName("spring");
 
         Member member2 = new Member();
         member2.setName("spring");
 
-        // when
+        //when
         memberService.join(member1);
-
-        // 의미: () -> memberService.join(member2) 이 로직을 실행했을 때, IllegalStateException 예외가 터져야 돼
         IllegalStateException e = assertThrows(IllegalStateException.class, () -> memberService.join(member2));
+        // 반드시 IllegalStateException이 터져야 함
         assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
-        /*
-        try {
-            memberService.join(member2);
-            fail();
-        } catch(IllegalStateException e) {
-            assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
-        }
-        */
+//        try {
+//            memberService.join(member2);
+//            fail(); //강제로 실패 발생시킴
+//        } catch (IllegalStateException e) {
+//            assertThat(e.getMessage()).isEqualTo("이미 존재하는 회원입니다.");
+//        }
 
-        // then
+        //then
     }
 
     @Test
     void findMembers() {
-
     }
 
     @Test

@@ -9,5 +9,5 @@ public interface MemberRepository {
     Member save(Member member);
     Optional<Member> findById(Long id);
     Optional<Member> findByName(String name);
-    List<Member> findAll(); // 지금까지 저장된 모든 회원 리스트 반환
+    List<Member> findAll();
 }

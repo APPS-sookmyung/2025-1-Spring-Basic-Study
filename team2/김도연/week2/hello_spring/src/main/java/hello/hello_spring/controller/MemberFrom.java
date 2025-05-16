@@ -1,6 +1,6 @@
 package hello.hello_spring.controller;
 
-public class MemberFrom {
+public class MemberForm {
     private String name;
 
     public String getName() {
@@ -10,4 +10,6 @@ public class MemberFrom {
     public void setName(String name) {
         this.name = name;
     }
+
+
 }
